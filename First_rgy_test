@@ -1,0 +1,12 @@
+module test_rgy();
+reg clk,rst_n;
+wire [5:0]led;
+initial
+  begin
+    clk = 1;
+    rst_n = 0;
+    #2 rst_n = 1;
+  end
+always #5 clk = ~clk;
+first_rgy out(.clk(clk),.rst_n(rst_n),.led(led));
+endmodule
