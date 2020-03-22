@@ -1,0 +1,106 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 2020/03/22 22:00:28
+// Design Name: 
+// Module Name: first_rgy
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module first_rgy(clk,rst_n,led);
+input clk;
+input rst_n;
+output reg[5:0] led;
+reg [4:0] time_left;
+reg [1:0] state;
+parameter [1:0] S1 = 2'b00, S2 = 2'b01,S3 = 2'b11,S4 = 2'b10;
+//parameter [5:0] light1 = 6'b100001,light2 = 6'b100010,light3 = 6'b001100,light4 = 6'b010100;
+initial
+  begin
+    if(rst_n)
+      begin
+        state <= S1;
+        time_left <= 5'd6;
+        led <= 6'b100001;
+      end
+    end
+always @(posedge clk)
+    begin
+      if(!rst_n)
+        begin
+          state <= S1;
+          time_left <= 5'd6;
+          led <= 6'b100001;
+        end
+      else
+        begin
+          case(state)
+            S1:
+              begin
+                if(time_left==0)
+                  begin
+                    state <= S2;
+                    time_left <= 5'd2;
+                    led <= 6'b100010;
+                  end
+                else
+                  begin
+                    time_left <= time_left - 1;
+                  end
+              end
+            S2:
+              begin
+                if(time_left==0)
+                  begin
+                    state <= S3;
+                    time_left <= 5'd14;
+                    led = 6'b001100;
+                  end
+                else
+                  begin
+                    time_left <= time_left - 1;
+                  end
+              end 
+              S3:
+                begin
+                  if(time_left==0)
+                    begin
+                      state <= S4;
+                      time_left <= 5'd2;
+                      led <= 6'b010100;
+                    end
+                  else
+                    begin
+                      time_left <= time_left - 1;
+                    end
+                end 
+              S4:
+                begin
+                  if(time_left==0)
+                    begin
+                      state <= S1;
+                      time_left <= 5'd6;
+                      led <= 6'b100001;
+                    end
+                  else
+                    begin
+                      time_left <= time_left - 1;
+                    end
+                 end 
+          endcase
+        end 
+end
+endmodule
